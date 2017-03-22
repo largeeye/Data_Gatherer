@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Wearable Project</string>
+    <string name="addTile">Add tile to Band</string>
+    <string name="removeTile">Remove tile from Band</string>
+    <string name="accLabel">Track Accelerometer</string>
+    <string name="gyroLabel">Track Gyroscope</string>
+    <string name="noData">No Data</string>
+    <string name="xTxt">X:</string>
+    <string name="yTxt">Y:</string>
+    <string name="zTxt">Z:</string>
+    <string name="showSavedLabel">Show Saved Data</string>
+</resources>

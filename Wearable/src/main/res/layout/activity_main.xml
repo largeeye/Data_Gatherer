@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="qut.wearable_project.MainActivity">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/addTile"
+        android:id="@+id/installBtn"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/removeTile"
+        android:id="@+id/uninstallBtn"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/installBtn" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/xTxt"
+        android:id="@+id/xAccLabel"
+        android:layout_below="@+id/accSwitch"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/yTxt"
+        android:id="@+id/yAccLabel"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/xAccLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/zTxt"
+        android:id="@+id/zAccLabel"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/yAccLabel" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/accLabel"
+        android:id="@+id/accSwitch"
+        android:layout_below="@+id/installBtn"
+        android:layout_alignParentStart="true"
+        android:checked="false"
+        android:enabled="false"
+        android:layout_alignEnd="@+id/installBtn" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/xAccVal"
+        android:layout_alignTop="@+id/xAccLabel"
+        android:layout_toEndOf="@+id/xAccLabel"
+        android:text="@string/noData" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/yAccVal"
+        android:layout_below="@+id/xAccVal"
+        android:layout_toEndOf="@+id/xAccLabel"
+        android:text="@string/noData" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/zAccVal"
+        android:layout_alignTop="@+id/zAccLabel"
+        android:layout_alignStart="@+id/yAccVal"
+        android:text="@string/noData" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gyroLabel"
+        android:id="@+id/gyroSwitch"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/accSwitch"
+        android:enabled="false"
+        android:checked="false"
+        android:layout_below="@+id/zAccLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/xTxt"
+        android:id="@+id/xGyroLabel"
+        android:layout_below="@+id/gyroSwitch"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/yTxt"
+        android:id="@+id/yGyroLabel"
+        android:layout_below="@+id/xGyroLabel"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/zTxt"
+        android:id="@+id/zGyroLabel"
+        android:layout_below="@+id/yGyroLabel"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/noData"
+        android:id="@+id/xGyroVal"
+        android:layout_above="@+id/yGyroLabel"
+        android:layout_alignStart="@+id/zAccVal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/noData"
+        android:id="@+id/yGyroVal"
+        android:layout_alignBaseline="@+id/yGyroLabel"
+        android:layout_alignBottom="@+id/yGyroLabel"
+        android:layout_toEndOf="@+id/xGyroLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/noData"
+        android:id="@+id/zGyroVal"
+        android:layout_alignTop="@+id/zGyroLabel"
+        android:layout_alignStart="@+id/yGyroVal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/showSavedLabel"
+        android:id="@+id/showSavedBtn"
+        android:layout_below="@+id/zGyroLabel"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/gyroSwitch" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/noData"
+        android:id="@+id/showSavedTxt"
+        android:layout_below="@+id/showSavedBtn"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/showSavedBtn"
+        android:layout_above="@+id/uninstallBtn" />
+
+</RelativeLayout>
