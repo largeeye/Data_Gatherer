@@ -1,6 +1,7 @@
 package qut.wearable_project;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.microsoft.band.BandClient;
 import com.microsoft.band.BandClientManager;
@@ -69,13 +71,14 @@ public class MainActivity extends AppCompatActivity {
     private final TextView[] accValTxt = new TextView[3];
     private final TextView[] gyroValTxt = new TextView[3];
     private TextView showSavedTxt;
+    private MainActivity activity;
 
     @SuppressLint("ShowToast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        activity = this;
         statusTst = Toast.makeText(MainActivity.this, null, Toast.LENGTH_LONG);
 
         accValTxt[0] = (TextView) findViewById(R.id.xAccVal);
@@ -187,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Send Email Button
+
         Button send = (Button) findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -197,6 +201,8 @@ public class MainActivity extends AppCompatActivity {
                     //stuff
                     sendMessage();
                     Log.d("SENT","EMAIL SENT");
+                    activity.
+                    activity.displayMessage("Email sent.");
                     //get the text from the sdcard
                     //create session
                     //send the email here
@@ -433,11 +439,11 @@ public class MainActivity extends AppCompatActivity {
     } // end streamToString
 
     private void sendMessage() {
-        String recipients[] = {"group7testdata"};
+        String recipients[] = {"group7testdata@gmail.com"};
         SendEmailAsyncTask email = new SendEmailAsyncTask();
         email.activity = this;
-        email.m = new Mail("datagatherersender@gmail.com", "javaisshit");
-        email.m.set_from("datagatherersender@gmail.com");
+        email.m = new Mail("datagathersender@gmail.com", "javaisshit");
+        email.m.set_from("datagathersender@gmail.com");
         email.m.setBody("whatever");
         email.m.set_to(recipients);
         email.m.set_subject("testData");
@@ -453,8 +459,12 @@ public class MainActivity extends AppCompatActivity {
         return ret;
     } // end getStrFromFile
 
+    public void displayMessage(String message) {
+        Toast toast = Toast.makeText(activity, message,Toast.LENGTH_LONG );
+        toast.show();
+    }
 
-    class SendEmailAsyncTask extends AsyncTask<Void, Void, Boolean> {
+    public class SendEmailAsyncTask extends AsyncTask<Void, Void, Boolean> {
         Mail m;
         MainActivity activity;
 
@@ -476,18 +486,21 @@ public class MainActivity extends AppCompatActivity {
             } catch (AuthenticationFailedException e) {
                 Log.e(SendEmailAsyncTask.class.getName(), "Bad account details");
                 e.printStackTrace();
-                //activity.displayMessage("Authentication failed.");
+                activity.displayMessage("Authentication failed.");
                 return false;
             } catch (MessagingException e) {
                 Log.e(SendEmailAsyncTask.class.getName(), "Email failed");
                 e.printStackTrace();
-                //activity.displayMessage("Email failed to send.");
+                activity.displayMessage("Email failed to send.");
                 return false;
             } catch (Exception e) {
                 e.printStackTrace();
-                //activity.displayMessage("Unexpected error occured.");
+                activity.displayMessage("Unexpected error occured.");
                 return false;
             }
         }
+
     }
+
+
 }
