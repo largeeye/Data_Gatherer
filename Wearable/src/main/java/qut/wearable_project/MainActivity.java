@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
-                            String filePath = getFilesDir().toString() + "/acc_data";
+                            String filePath = getFilesDir().toString() + "/acc_data.txt";
                             String str = getStrFromFile(filePath);
 
                             showSavedTxt.setText(str);

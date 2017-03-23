@@ -93,7 +93,7 @@ class ProjectAccelerometer implements ProjectSensorInterface {
     } // end unregisterListener
 
     private void saveAccData(long time, float xAcc, float yAcc, float zAcc, Activity activity){
-        String FILENAME = "acc_data";
+        String FILENAME = "acc_data.txt";
         String x, y, z, t, string;
 
         x = String.format(Locale.getDefault(), "%f", xAcc);
