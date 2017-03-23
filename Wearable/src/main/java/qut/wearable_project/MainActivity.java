@@ -413,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
      * Private method to create local save file for accelerometer data upon startup.
      */
     private void saveInit() {
-        String FILENAME = "acc_data";
+        String FILENAME = "acc_data.txt";
         String string = "datetime,acc_x,acc_y,acc_z,";
 
         try {
@@ -439,12 +439,18 @@ public class MainActivity extends AppCompatActivity {
     } // end streamToString
 
     private void sendMessage() {
+        String filePath = getFilesDir().toString() + "/acc_data.txt";
         String recipients[] = {"group7testdata@gmail.com"};
         SendEmailAsyncTask email = new SendEmailAsyncTask();
         email.activity = this;
         email.m = new Mail("datagathersender@gmail.com", "javaisshit");
         email.m.set_from("datagathersender@gmail.com");
         email.m.setBody("whatever");
+        try {
+            email.m.addAttachment(filePath);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         email.m.set_to(recipients);
         email.m.set_subject("testData");
         email.execute();
