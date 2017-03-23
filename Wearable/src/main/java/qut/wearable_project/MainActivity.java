@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -38,12 +39,15 @@ import com.microsoft.band.tiles.pages.WrappedTextBlockFont;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.UUID;
+
+
+
 
 /**
  * @author James Galloway
@@ -178,6 +182,21 @@ public class MainActivity extends AppCompatActivity {
                     });
             }
         });
+
+        //Send Email Button
+        Button send = (Button) findViewById(R.id.send);
+        send.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                //todo
+                try {
+                    //stuff
+                }
+                catch (Exception e){
+                    Log.e("SendMail",e.getMessage(),e);
+                }
+            }
+
+        });
     } // end setEventListeners
 
     enum TileLayoutIndex {
@@ -268,7 +287,22 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         } // end connectToBand
+        private boolean reconnectTile() {
+            try {
+                // get the current set of tiles
+                Log.d("test","Reconnecting");
+                List<BandTile> tiles =
+                        bandClient.getTileManager().getTiles().await();
+                return true;
+            } catch (BandException e) {
+                // handle BandException
+                return false;
+            } catch (InterruptedException e) {
+                // handle InterruptedException
+                return false;
+            }
 
+        }
         /**
          * Creates the project tile on the Band.
          *
@@ -289,17 +323,19 @@ public class MainActivity extends AppCompatActivity {
                     .setPageLayouts(layout)
                     .build();
 
-            try {
-                if (!bandClient.getTileManager().addTile(MainActivity.this, tile).await()) {
-                    response = "Could not add tile to the Band.";
+                try {
+                    if (!bandClient.getTileManager().addTile(MainActivity.this, tile).await()) {
+                        response = "Could not add tile to the Band.";
+                        return false;
+                    }
+                    return true;
+                } catch (InterruptedException | BandException ex) {
+                    ex.printStackTrace();
+                    response = ex.getMessage();
                     return false;
                 }
-                return true;
-            } catch (InterruptedException | BandException ex) {
-                ex.printStackTrace();
-                response = ex.getMessage();
-                return false;
-            }
+
+
         } // end createTile
 
         /**
@@ -392,4 +428,6 @@ public class MainActivity extends AppCompatActivity {
         fin.close();
         return ret;
     } // end getStrFromFile
+
+
 }
