@@ -100,7 +100,7 @@ class ProjectAccelerometer implements ProjectSensorInterface {
         y = String.format(Locale.getDefault(), "%f", yAcc);
         z = String.format(Locale.getDefault(), "%f", zAcc);
         t = Long.toString(time);
-        string = t + "," + x + "," + y + "," + z + ",";
+        string = t + "," + x + "," + y + "," + z + "\n";
 
 
         try {
