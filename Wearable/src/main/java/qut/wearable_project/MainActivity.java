@@ -2,8 +2,10 @@ package qut.wearable_project;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,7 +48,8 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.UUID;
 
-
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
 
 
 /**
@@ -165,34 +168,41 @@ public class MainActivity extends AppCompatActivity {
         showSavedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                String filePath = getFilesDir().toString() + "/acc_data";
-                                String str = getStrFromFile(filePath);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String filePath = getFilesDir().toString() + "/acc_data";
+                            String str = getStrFromFile(filePath);
 
-                                showSavedTxt.setText(str);
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                                statusTst.setText("Could not find saved data.");
-                                statusTst.show();
-                            }
+                            showSavedTxt.setText(str);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                            statusTst.setText("Could not find saved data.");
+                            statusTst.show();
                         }
-                    });
+                    }
+                });
             }
         });
 
         //Send Email Button
         Button send = (Button) findViewById(R.id.send);
-        send.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
+        send.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 //todo
                 try {
+
+
                     //stuff
-                }
-                catch (Exception e){
-                    Log.e("SendMail",e.getMessage(),e);
+                    sendMessage();
+                    Log.d("SENT","EMAIL SENT");
+                    //get the text from the sdcard
+                    //create session
+                    //send the email here
+
+                } catch (Exception e) {
+                    Log.e("SendMail", e.getMessage(), e);
                 }
             }
 
@@ -202,13 +212,14 @@ public class MainActivity extends AppCompatActivity {
     enum TileLayoutIndex {
         MessagesLayout
     }
+
     enum TileMessagesPageElementId {
         Message
     }
 
     /**
      * @author James Galloway
-     * Private class with functions required to install the Band application.
+     *         Private class with functions required to install the Band application.
      */
     private class InstallAsync extends AsyncTask<Void, Void, Boolean> {
         private String response;
@@ -224,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
          * @return True if the installation was successful, otherwise false.
          */
         @Override
-        protected Boolean doInBackground(Void...params) {
+        protected Boolean doInBackground(Void... params) {
             return connectToBand() && createTile() && setPageContent();
         } // end doInBackground
 
@@ -287,10 +298,11 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         } // end connectToBand
+
         private boolean reconnectTile() {
             try {
                 // get the current set of tiles
-                Log.d("test","Reconnecting");
+                Log.d("test", "Reconnecting");
                 List<BandTile> tiles =
                         bandClient.getTileManager().getTiles().await();
                 return true;
@@ -303,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+
         /**
          * Creates the project tile on the Band.
          *
@@ -323,17 +336,17 @@ public class MainActivity extends AppCompatActivity {
                     .setPageLayouts(layout)
                     .build();
 
-                try {
-                    if (!bandClient.getTileManager().addTile(MainActivity.this, tile).await()) {
-                        response = "Could not add tile to the Band.";
-                        return false;
-                    }
-                    return true;
-                } catch (InterruptedException | BandException ex) {
-                    ex.printStackTrace();
-                    response = ex.getMessage();
+            try {
+                if (!bandClient.getTileManager().addTile(MainActivity.this, tile).await()) {
+                    response = "Could not add tile to the Band.";
                     return false;
                 }
+                return true;
+            } catch (InterruptedException | BandException ex) {
+                ex.printStackTrace();
+                response = ex.getMessage();
+                return false;
+            }
 
 
         } // end createTile
@@ -392,7 +405,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * @author Lok Sum (Moon) Lo
      * Private method to create local save file for accelerometer data upon startup.
-     *
      */
     private void saveInit() {
         String FILENAME = "acc_data";
@@ -402,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
             FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
             fos.write(string.getBytes());
             fos.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             statusTst.setText("Can't create save file.");
             statusTst.show();
@@ -420,7 +432,19 @@ public class MainActivity extends AppCompatActivity {
         return sb.toString();
     } // end streamToString
 
-    public static String getStrFromFile (String filePath) throws IOException {
+    private void sendMessage() {
+        String recipients[] = {"group7testdata"};
+        SendEmailAsyncTask email = new SendEmailAsyncTask();
+        email.activity = this;
+        email.m = new Mail("datagatherersender@gmail.com", "javaisshit");
+        email.m.set_from("datagatherersender@gmail.com");
+        email.m.setBody("whatever");
+        email.m.set_to(recipients);
+        email.m.set_subject("testData");
+        email.execute();
+    }
+
+    public static String getStrFromFile(String filePath) throws IOException {
         File fl = new File(filePath);
         FileInputStream fin = new FileInputStream(fl);
         String ret = streamToString(fin);
@@ -430,4 +454,40 @@ public class MainActivity extends AppCompatActivity {
     } // end getStrFromFile
 
 
+    class SendEmailAsyncTask extends AsyncTask<Void, Void, Boolean> {
+        Mail m;
+        MainActivity activity;
+
+        public SendEmailAsyncTask() {
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                if (m.send()) {
+                    //activity.displayMessage("Email sent.");
+                    Log.d("SENT", "EMAIL SENT SUCCESSFULLY");
+                } else {
+                    //activity.displayMessage("Email failed to send.");
+                    Log.d("SENT", "EMAIL DID NOT SEND");
+                }
+
+                return true;
+            } catch (AuthenticationFailedException e) {
+                Log.e(SendEmailAsyncTask.class.getName(), "Bad account details");
+                e.printStackTrace();
+                //activity.displayMessage("Authentication failed.");
+                return false;
+            } catch (MessagingException e) {
+                Log.e(SendEmailAsyncTask.class.getName(), "Email failed");
+                e.printStackTrace();
+                //activity.displayMessage("Email failed to send.");
+                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+                //activity.displayMessage("Unexpected error occured.");
+                return false;
+            }
+        }
+    }
 }
