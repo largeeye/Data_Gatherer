@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.mail.AuthenticationFailedException;
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         /* Uninstall Button */
-        Button uninstallBtn = (Button) findViewById(R.id.uninstallBtn);
+        /*Button uninstallBtn = (Button) findViewById(R.id.uninstallBtn);
         uninstallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     statusTst.show();
                 }
             }
-        });
+        }); */
 
         /* Accelerometer Switch */
         Switch accSwitch = (Switch) findViewById(R.id.accSwitch);
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ProjectAccelerometer projectAcc = projectClient.getProjectAcc();
                 if (isChecked) {
+                    newMovement();
                     projectAcc.registerListener(projectClient.getBandClient(), SampleRate.MS128);
                 } else {
                     projectAcc.unregisterListener(projectClient.getBandClient());
@@ -190,14 +192,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Send Email Button
-
         Button send = (Button) findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //todo
                 try {
-
-
                     //stuff
                     sendMessage();
                     Log.d("SENT","EMAIL SENT");
@@ -212,6 +211,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+        });
+
+        // Clear data
+        Button clear = (Button) findViewById(R.id.clear);
+        clear.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                saveInit();
+            }
         });
     } // end setEventListeners
 
@@ -414,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void saveInit() {
         String FILENAME = "acc_data.txt";
-        String string = "datetime,acc_x,acc_y,acc_z,";
+        String string = "";
 
         try {
             FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
@@ -469,6 +476,19 @@ public class MainActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(activity, message,Toast.LENGTH_LONG );
         toast.show();
     }
+
+    private void newMovement(){
+        String FILENAME = "acc_data.txt";
+        String heading = "x,y,z" + "\n";
+
+        try {
+            FileOutputStream fos = activity.openFileOutput(FILENAME, Context.MODE_APPEND);
+            fos.write(heading.getBytes());
+            fos.close();
+        } catch (Exception e){
+
+        }
+    } // end saveAccData
 
     public class SendEmailAsyncTask extends AsyncTask<Void, Void, Boolean> {
         Mail m;
